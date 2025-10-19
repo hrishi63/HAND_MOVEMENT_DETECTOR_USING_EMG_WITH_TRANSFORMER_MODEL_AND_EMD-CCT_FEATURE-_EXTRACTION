@@ -2,6 +2,7 @@
 
 
 Run this in the Terminal opened from the Backend
+
 python server.py
 
 Run this in the Terminal opened from the Frontend  
