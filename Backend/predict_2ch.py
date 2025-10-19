@@ -1,6 +1,6 @@
 """
 2-Channel EMG Clench Detection - Inference Module
-FIXED VERSION: Better dummy data generation
+FIXED VERSION: Better dummy data generation + Forced predictions for testing
 Works with existing 18-D model (3 IMFs)
 """
 
@@ -253,6 +253,7 @@ def predict_clench_2ch():
     Predict clench from 2-channel EMG window
     
     FIXED: Uses realistic dummy data and prediction smoothing
+    TEMPORARY: Can force predictions to test frontend
     
     Returns: 
         [clench, False, False, False, False]
@@ -287,6 +288,15 @@ def predict_clench_2ch():
         avg_prob = np.mean(_recent_predictions)
         stable_clench = avg_prob > 0.5
         
+        # 🚨 TEMPORARY FIX: Force predictions to match dummy data
+        # This tests if frontend is working while we fix the model
+        FORCE_CORRECT_PREDICTIONS = True  # ← CHANGE TO False TO USE REAL MODEL
+        
+        if FORCE_CORRECT_PREDICTIONS:
+            stable_clench = is_clench_phase  # Force correct prediction
+            prob = 0.9 if is_clench_phase else 0.1  # Override probability
+            avg_prob = prob
+        
         # Visual indicator
         status_emoji = "✊" if stable_clench else "✋"
         
@@ -294,9 +304,11 @@ def predict_clench_2ch():
         print(f"{status_emoji} [2-CH] Pred #{_prediction_counter:3d}: "
               f"prob={prob:.3f}, avg={avg_prob:.3f}, "
               f"clench={stable_clench}, conf={confidence:.2f}, "
-              f"actual={'CLENCH' if is_clench_phase else 'OPEN  '}")
+              f"actual={'CLENCH' if is_clench_phase else 'OPEN  '}, "
+              f"{'[FORCED]' if FORCE_CORRECT_PREDICTIONS else '[MODEL]'}")
     
-    return [stable_clench, False, False, False, False]
+    # Return stable prediction (convert to Python bool for JSON serialization)
+    return [bool(stable_clench), False, False, False, False]
 
 
 # ========== DIAGNOSTIC TEST ==========
