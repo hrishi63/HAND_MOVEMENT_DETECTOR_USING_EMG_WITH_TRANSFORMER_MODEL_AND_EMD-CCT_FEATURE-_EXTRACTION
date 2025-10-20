@@ -7,7 +7,7 @@ from flask_cors import CORS
 import numpy as np
 
 # ========== MODEL SELECTION ==========
-USE_2_CHANNEL = False  # Set to False to use old 10-channel model
+USE_2_CHANNEL = True  # Set to False to use old 10-channel model
 
 if USE_2_CHANNEL:
     print("🔵 Loading 2-CHANNEL model...")
