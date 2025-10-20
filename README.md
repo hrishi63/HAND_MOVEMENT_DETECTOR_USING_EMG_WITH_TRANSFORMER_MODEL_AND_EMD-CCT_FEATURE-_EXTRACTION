@@ -24,8 +24,8 @@ In this project, we aim to detect and classify hand movements using:
    - Band-pass filtering and normalization of EMG data
 
 2. **Feature Extraction**
-   - EMD → Intrinsic Mode Functions (IMFs)
-   - CCT → Cross-channel correlation tensor
+   - EMD → empirical mode decomposition 
+   - CCT → correlation coefficient threshold
 
 3. **Model Architecture**
    - Transformer encoder with multi-head attention
